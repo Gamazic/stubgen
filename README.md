@@ -24,14 +24,14 @@ type MyInterface interface {
 To generate stub for the file use command with arg `--inp-file`:
 
 ```shell
-go run stubgen --inp-file testdata/testfile.go
+stubgen --inp-file testdata/testfile.go
 ```
 
 Result:
 
 ```go
 type StubMyInterface struct {
-        AnotherFuncRes0 error
+	AnotherFuncRes0 error
 }
 
 func (s StubMyInterface) AnotherFunc(_ int, _ bool) error {
@@ -42,11 +42,11 @@ func (s StubMyInterface) AnotherFunc(_ int, _ bool) error {
 Alternatively, you can provide source code from stdin:
 
 ```shell
-cat testdata/testfile.go | go run stubgen
+cat testdata/testfile.go | stubgen
 ```
 
 To save data in a file use the `--out-file` arg:
 
 ```shell
-go run stubgen --inp-file testdata/testfile.go --out-file interface.go
+stubgen --inp-file testdata/testfile.go --out-file interface.go
 ```
