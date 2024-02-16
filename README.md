@@ -10,19 +10,19 @@ go install github.com/Gamazic/stubgen@latest
 
 ## Example
 
-For example, we have go module with the following content: 
+Have go module with the following content: 
 
 `testfile.go`
 ```go
 package testdata
 
 type MyInterface interface {
-	AnotherFunc(int, bool) error
+	Func(int, bool) error
 }
 
 ```
 
-To generate stub for the file use command with arg `--inp-file`:
+To generate stub for the file use the command with arg `--inp-file`:
 
 ```shell
 stubgen --inp-file testdata/testfile.go
@@ -34,16 +34,16 @@ Result:
 package testdata
 
 type StubMyInterface struct {
-	AnotherFuncRes0 error
+	FuncRes0 error
 }
 
-func (s StubMyInterface) AnotherFunc(_ int, _ bool) error {
-	return s.AnotherFuncRes0
+func (s StubMyInterface) Func(_ int, _ bool) error {
+	return s.FuncRes0
 }
 
 ```
 
-Alternatively, you can provide source code from stdin:
+Alternatively, you can provide a source code from stdin:
 
 ```shell
 cat testdata/testfile.go | stubgen
@@ -52,5 +52,5 @@ cat testdata/testfile.go | stubgen
 To save data in a file use the `--out-file` arg:
 
 ```shell
-stubgen --inp-file testdata/testfile.go --out-file interface.go
+stubgen --inp-file testfile.go --out-file testfile_stub.go
 ```
