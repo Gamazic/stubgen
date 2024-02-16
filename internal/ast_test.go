@@ -10,10 +10,11 @@ func TestGetAstInterfaces(t *testing.T) {
 		src      string
 	}
 	tests := []struct {
-		name    string
-		args    args
-		wantLen int
-		wantErr bool
+		name                  string
+		args                  args
+		wantLenInterfaceTypes int
+		wantFile              bool
+		wantErr               bool
 	}{
 		{
 			name: "empty",
@@ -21,8 +22,9 @@ func TestGetAstInterfaces(t *testing.T) {
 				filename: "",
 				src:      "",
 			},
-			wantLen: 0,
-			wantErr: true,
+			wantLenInterfaceTypes: 0,
+			wantFile:              false,
+			wantErr:               true,
 		},
 		{
 			name: "package only",
@@ -30,8 +32,9 @@ func TestGetAstInterfaces(t *testing.T) {
 				filename: "",
 				src:      "package main",
 			},
-			wantLen: 0,
-			wantErr: false,
+			wantLenInterfaceTypes: 0,
+			wantFile:              true,
+			wantErr:               false,
 		},
 		{
 			name: "one interface",
@@ -46,8 +49,9 @@ type MyInterface interface {
 }
 `,
 			},
-			wantLen: 1,
-			wantErr: false,
+			wantLenInterfaceTypes: 1,
+			wantFile:              true,
+			wantErr:               false,
 		},
 		{
 			name: "2 interfaces",
@@ -68,8 +72,9 @@ type Interface2 interface {
 }
 `,
 			},
-			wantLen: 2,
-			wantErr: false,
+			wantLenInterfaceTypes: 2,
+			wantFile:              true,
+			wantErr:               false,
 		},
 		{
 			name: "2 interfaces, 1 empty",
@@ -92,8 +97,9 @@ type Interface2 interface {
 type EmptyInterface interface{}
 `,
 			},
-			wantLen: 2,
-			wantErr: false,
+			wantLenInterfaceTypes: 2,
+			wantFile:              true,
+			wantErr:               false,
 		},
 		{
 			name: "2 empty interfaces",
@@ -106,19 +112,35 @@ type EmptyInterface1 interface{}
 type EmptyInterface2 interface{}
 `,
 			},
-			wantLen: 0,
-			wantErr: false,
+			wantLenInterfaceTypes: 0,
+			wantFile:              true,
+			wantErr:               false,
+		},
+		{
+			name: "2 empty interfaces with no package",
+			args: args{
+				filename: "",
+				src: `
+type EmptyInterface1 interface{}
+type EmptyInterface2 interface{}
+`,
+			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := GetAstInterfaces(tt.args.filename, tt.args.src)
+			got, err := GetAstInfo(tt.args.filename, tt.args.src)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetAstInterfaces() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetAstInfo() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if len(got) != tt.wantLen {
-				t.Errorf("GetAstInterfaces() len(got) = %v, wantLen %v", got, tt.wantLen)
+			if (got.File != nil) != tt.wantFile {
+				t.Errorf("GetAstInfo() .File = %v, wantFile %v", got.File, tt.wantErr)
+				return
+			}
+			if len(got.InterfaceTypes) != tt.wantLenInterfaceTypes {
+				t.Errorf("GetAstInfo() len(got) = %v, wantLenInterfaceTypes %v", got, tt.wantLenInterfaceTypes)
 			}
 		})
 	}

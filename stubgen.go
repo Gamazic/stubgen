@@ -103,19 +103,21 @@ func parseArgs() (appArgs, error) {
 }
 
 func genStubsFromSrc(src string) (string, error) {
-	interfacesAst, err := internal.GetAstInterfaces("", src)
+	astInfo, err := internal.GetAstInfo("", src)
 	if err != nil {
 		return "", err
 	}
-	if len(interfacesAst) == 0 {
+	packName := internal.ParsePackage(astInfo.File)
+	if len(astInfo.InterfaceTypes) == 0 {
 		return "", errors.New("no interfaces were found")
 	}
-	stubSrc := make([]string, 0)
-	for _, interfaceAst := range interfacesAst {
+	stubsSrc := make([]string, 0)
+	for _, interfaceAst := range astInfo.InterfaceTypes {
 		parsedInterface := internal.ParseInterface(interfaceAst)
 		interfaceSrc := internal.GenStubFromInterface(parsedInterface)
-		stubSrc = append(stubSrc, interfaceSrc)
+		stubsSrc = append(stubsSrc, interfaceSrc)
 	}
-	allStubsSrc := strings.Join(stubSrc, "\n")
-	return allStubsSrc, nil
+	packageHeader := fmt.Sprintf("package %s\n", packName)
+	outSrc := append([]string{packageHeader}, stubsSrc...)
+	return strings.Join(outSrc, "\n"), nil
 }

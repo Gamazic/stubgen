@@ -5,6 +5,10 @@ import (
 	"go/ast"
 )
 
+func ParsePackage(f *ast.File) string {
+	return f.Name.Name
+}
+
 type Interface struct {
 	Name    string
 	Methods []Method

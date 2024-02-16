@@ -7,10 +7,15 @@ import (
 	"go/token"
 )
 
-func GetAstInterfaces(filename, src string) ([]*ast.TypeSpec, error) {
+type AstInfo struct {
+	File           *ast.File
+	InterfaceTypes []*ast.TypeSpec
+}
+
+func GetAstInfo(filename, src string) (AstInfo, error) {
 	f, err := parser.ParseFile(token.NewFileSet(), filename, src, parser.SkipObjectResolution)
 	if err != nil {
-		return nil, fmt.Errorf("parsing source file as ast: %w", err)
+		return AstInfo{}, fmt.Errorf("parsing source file as ast: %w", err)
 	}
 	foundInterfaces := make([]*ast.TypeSpec, 0)
 
@@ -28,5 +33,8 @@ func GetAstInterfaces(filename, src string) ([]*ast.TypeSpec, error) {
 		}
 		return true
 	})
-	return foundInterfaces, nil
+	return AstInfo{
+		File:           f,
+		InterfaceTypes: foundInterfaces,
+	}, nil
 }
