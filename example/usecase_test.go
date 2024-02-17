@@ -15,7 +15,20 @@ func TestUseCase_CreateUser(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "happy path",
+			fields: fields{
+				Repo: StubUserRepo{
+					NextIdRes0: 1,
+					NextIdRes1: nil,
+					StoreRes0:  nil,
+				},
+			},
+			args: args{
+				name: "user",
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
