@@ -7,34 +7,37 @@ import (
 	"go/token"
 )
 
-type AstInfo struct {
+type AstModule struct {
 	File           *ast.File
+	Imports        []*ast.ImportSpec
 	InterfaceTypes []*ast.TypeSpec
 }
 
-func GetAstInfo(filename, src string) (AstInfo, error) {
+func GetAstModule(filename string, src []byte) (AstModule, error) {
 	f, err := parser.ParseFile(token.NewFileSet(), filename, src, parser.SkipObjectResolution)
 	if err != nil {
-		return AstInfo{}, fmt.Errorf("parsing source file as ast: %w", err)
+		return AstModule{}, fmt.Errorf("parsing source file as ast: %w", err)
 	}
 	foundInterfaces := make([]*ast.TypeSpec, 0)
+	foundImports := make([]*ast.ImportSpec, 0)
 
-	// depth-first search for interfaces
+	// depth-first search for interfaces and imports
 	ast.Inspect(f, func(n ast.Node) bool {
 		switch t := n.(type) {
 		// find variable declaration
 		case *ast.TypeSpec:
-			if t.Name.IsExported() {
-				itype, ok := t.Type.(*ast.InterfaceType)
-				if ok && itype.Methods.List != nil {
-					foundInterfaces = append(foundInterfaces, t)
-				}
+			itype, ok := t.Type.(*ast.InterfaceType)
+			if ok && itype.Methods.List != nil {
+				foundInterfaces = append(foundInterfaces, t)
 			}
+		case *ast.ImportSpec:
+			foundImports = append(foundImports, t)
 		}
 		return true
 	})
-	return AstInfo{
+	return AstModule{
 		File:           f,
+		Imports:        foundImports,
 		InterfaceTypes: foundInterfaces,
 	}, nil
 }

@@ -1,6 +1,10 @@
 # stubgen
 
-A Golang library for generating interface stubs.
+A Golang library for generating interface stubs. Stubs make it easy to test a project in a table-driven style.
+
+For an example of an easy-to-test approach, refer to the [example](./example) directory.
+
+Currently, the `stubgen` doesn't support generic interfaces.
 
 ## Installation
 
@@ -10,7 +14,7 @@ go install github.com/Gamazic/stubgen@latest
 
 ## Example
 
-Have go module with the following content: 
+Have a Go module with the following content:
 
 `testfile.go`
 ```go
@@ -22,7 +26,7 @@ type MyInterface interface {
 
 ```
 
-To generate stub for the file use the command with arg `--inp-file`:
+To generate a stub for the file, use the command with the `--inp-file` argument:
 
 ```shell
 stubgen --inp-file testdata/testfile.go
@@ -44,14 +48,16 @@ func (s StubMyInterface) Func(_ int, _ bool) error {
 }
 ```
 
-Alternatively, you can provide a source code from stdin:
+Alternatively, you can provide source code from stdin:
 
 ```shell
 cat testdata/testfile.go | stubgen
 ```
 
-To save data in a file use the `--out-file` arg:
+To save data in a file, use the `--out-file` argument:
 
 ```shell
 stubgen --inp-file testfile.go --out-file testfile_stub.go
 ```
+
+For more examples you can check [example](./example) directory or [testdata](./testdata) directory.

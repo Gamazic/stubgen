@@ -113,25 +113,25 @@ func TestParseInterface(t *testing.T) {
 						Params: []Param{
 							{
 								Name: "arg",
-								Type: "int",
+								Type: Type{Name: "int"},
 							},
 							{
 								Name: "arg2",
-								Type: "internal.MyStruct1",
+								Type: Type{Package: "internal", Name: "MyStruct1"},
 							},
 						},
 						Res: []Param{
 							{
 								Name: "ok",
-								Type: "bool",
+								Type: Type{Name: "bool"},
 							},
 							{
 								Name: "s",
-								Type: "external.MyStruct2",
+								Type: Type{Package: "external", Name: "MyStruct2"},
 							},
 							{
 								Name: "err",
-								Type: "error",
+								Type: Type{Name: "error"},
 							},
 						},
 					},
