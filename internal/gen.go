@@ -126,7 +126,7 @@ func (g genModule) genSrc() []byte {
 	if err != nil {
 		panic(fmt.Errorf("error formatting stubs code: %w", err))
 	}
-	return bytes.Trim(pretty, "\n")
+	return append(bytes.Trim(pretty, "\n"), '\n')
 }
 
 const moduleTemplateString = `

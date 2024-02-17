@@ -22,7 +22,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "1 interface",
+			name: "t1, 1 interface",
 			args: args{
 				src: mustReadFile("testdata/t1.go"),
 			},
@@ -30,7 +30,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "1 interface no args",
+			name: "t2, 1 interface no args",
 			args: args{
 				src: mustReadFile("testdata/t2.go"),
 			},
@@ -38,7 +38,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "2 interfaces",
+			name: "t3, 2 interfaces",
 			args: args{
 				src: mustReadFile("testdata/t3.go"),
 			},
@@ -46,7 +46,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "2 interfaces, one empty",
+			name: "t4, 2 interfaces, one empty",
 			args: args{
 				src: mustReadFile("testdata/t4.go"),
 			},
@@ -54,7 +54,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "2 empty interface",
+			name: "t5, 2 empty interface",
 			args: args{
 				src: mustReadFile("testdata/t5.go"),
 			},
@@ -62,7 +62,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 			wantErr: true,
 		},
 		{
-			name: "big interfaces with import",
+			name: "t6, big interfaces with import",
 			args: args{
 				src: mustReadFile("testdata/t6.go"),
 			},
@@ -70,7 +70,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "interface with other code",
+			name: "t7, interface with other code",
 			args: args{
 				src: mustReadFile("testdata/t7.go"),
 			},
@@ -78,7 +78,7 @@ func Test_genStubsFromSrc(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "short import",
+			name: "t8, short import",
 			args: args{
 				src: mustReadFile("testdata/t8.go"),
 			},
